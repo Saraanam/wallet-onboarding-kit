@@ -45,6 +45,7 @@ const RolesSection = () => {
                     : { background: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }
                 }
                 disabled={!connected}
+                onClick={() => connected && navigate(r.path)}
               >
                 {connected ? "Enter Dashboard" : "Connect Wallet First"}
               </button>
