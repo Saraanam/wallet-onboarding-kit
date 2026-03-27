@@ -6,6 +6,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import WalletProvider from "@/components/WalletProvider";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import EmployerDashboard from "./pages/EmployerDashboard.tsx";
+import HRDashboard from "./pages/HRDashboard.tsx";
+import EmployeeDashboard from "./pages/EmployeeDashboard.tsx";
+import ManagerDashboard from "./pages/ManagerDashboard.tsx";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +22,10 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/employer/*" element={<EmployerDashboard />} />
+            <Route path="/hr/*" element={<HRDashboard />} />
+            <Route path="/employee/*" element={<EmployeeDashboard />} />
+            <Route path="/manager/*" element={<ManagerDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
