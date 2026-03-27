@@ -1,15 +1,17 @@
 import { Building2, UserCog, User, Users } from "lucide-react";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useNavigate } from "react-router-dom";
 
 const roles = [
-  { icon: Building2, title: "Employer", desc: "Monitor workforce, manage operations, and oversee exit workflows" },
-  { icon: UserCog, title: "HR Admin", desc: "Handle onboarding, employee management, and exit processes" },
-  { icon: User, title: "Employee", desc: "Track tasks, manage leaves, view salary and achievements" },
-  { icon: Users, title: "Manager", desc: "Oversee team performance with audited access controls" },
+  { icon: Building2, title: "Employer", desc: "Monitor workforce, manage operations, and oversee exit workflows", path: "/employer" },
+  { icon: UserCog, title: "HR Admin", desc: "Handle onboarding, employee management, and exit processes", path: "/hr" },
+  { icon: User, title: "Employee", desc: "Track tasks, manage leaves, view salary and achievements", path: "/employee" },
+  { icon: Users, title: "Manager", desc: "Oversee team performance with audited access controls", path: "/manager" },
 ];
 
 const RolesSection = () => {
   const { connected } = useWallet();
+  const navigate = useNavigate();
 
   return (
     <section className="py-20" style={{ background: "var(--gradient-hero)" }}>
