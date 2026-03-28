@@ -24,12 +24,13 @@ const features = [
 ];
 
 const FeaturesSection = () => (
-  <section className="py-20">
-    <div className="container mx-auto grid gap-6 px-4 sm:grid-cols-2 lg:grid-cols-4">
+  <section className="py-20 relative">
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(160_100%_40%/0.04),transparent_70%)]" />
+    <div className="container relative mx-auto grid gap-6 px-4 sm:grid-cols-2 lg:grid-cols-4">
       {features.map((f) => (
         <div
           key={f.title}
-          className="group rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1"
+          className="group rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30"
           style={{ boxShadow: "var(--shadow-card)" }}
           onMouseEnter={(e) =>
             (e.currentTarget.style.boxShadow = "var(--shadow-card-hover)")
