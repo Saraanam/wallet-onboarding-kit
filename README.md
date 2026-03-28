@@ -60,7 +60,7 @@ To build a future where employees **own their work identity** and organizations 
 
 <p>
   Live link - "https://ketchups.lovable.app"
-  Live link (updating soon)  
+  Live link (updating soon) - "www.ketchups.in"
 </p>
 
 <p align="center">
