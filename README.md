@@ -1,28 +1,63 @@
-🚀 Ketchup — Decentralized HR
+<h1 align="center">🚀 Ketchup</h1>
+<h3 align="center">Decentralized HR for the Modern Workplace</h3>
 
-Ketchup is a blockchain-based HR platform designed to bring transparency, fairness, and automation into traditional HR systems.
+<p align="center">
+  Bringing <b>transparency</b>, <b>fairness</b>, and <b>automation</b> to HR using blockchain ⚡
+</p>
 
-✨ What it does
-🔐 Stores HR records on blockchain (tamper-proof & transparent)
-🤖 Automates processes like leave & recognition using smart contracts
-👤 Gives employees ownership of their HR data
-⚖️ Reduces bias in decision-making
-💡 Why Ketchup?
+---
+
+## ✨ Overview
+
+Ketchup is a decentralized HR platform that reimagines traditional HR systems by making them **transparent, automated, and trustless**.
+
+It empowers employees with **data ownership** while helping organizations eliminate **bias and inefficiencies**.
+
+---
+
+## 🔥 Key Features
+
+- 🔐 **Immutable Records** — Secure, tamper-proof HR data on blockchain  
+- 🤖 **Automation** — Smart contracts for leave, recognition & workflows  
+- 👤 **Employee Ownership** — Users control their own HR data  
+- ⚖️ **Bias Reduction** — Fair and transparent decision-making  
+
+---
+
+## 💡 Why Ketchup?
 
 Traditional HR systems are:
+> ❌ Manual  
+> ❌ Opaque  
+> ❌ Prone to bias  
 
-Manual
-Opaque
-Biased
+Ketchup makes HR:
+> ✅ Transparent  
+> ✅ Automated  
+> ✅ Fair by design  
 
-Ketchup solves this by making HR trustless, transparent, and efficient.
+---
 
-🛠️ Tech Stack
-Solidity (Smart Contracts)
-Ethereum / zkSync
-React / Next.js
-Node.js
+## 🛠️ Tech Stack
 
-🌟 Vision
+<p>
+  💻 Solidity &nbsp;&nbsp;|&nbsp;&nbsp;
+  🔗 Ethereum / zkSync &nbsp;&nbsp;|&nbsp;&nbsp;
+  ⚛️ React / Next.js &nbsp;&nbsp;|&nbsp;&nbsp;
+  🟢 Node.js
+</p>
 
-To build a future where employees own their work identity and HR systems are fair by design.
+---
+
+## 🌍 Vision
+
+To build a future where employees **own their work identity** and organizations operate on **trustless, transparent systems**.
+
+---
+
+
+---
+
+<p align="center">
+  Built with ❤️ by Team Ketchup
+</p>
