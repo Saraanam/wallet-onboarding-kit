@@ -7,7 +7,7 @@
 
 ---
 
-## ✨ Overview
+## Overview
 
 Ketchup is a decentralized HR platform that reimagines traditional HR systems by making them **transparent, automated, and trustless**.
 
@@ -15,7 +15,7 @@ It empowers employees with **data ownership** while helping organizations elimin
 
 ---
 
-## 🔥 Key Features
+## Key Features
 
 - 🔐 **Immutable Records** — Secure, tamper-proof HR data on blockchain  
 - 🤖 **Automation** — Smart contracts for leave, recognition & workflows  
@@ -24,7 +24,7 @@ It empowers employees with **data ownership** while helping organizations elimin
 
 ---
 
-## 💡 Why Ketchup?
+## Why Ketchup?
 
 Traditional HR systems are:
 > ❌ Manual  
@@ -38,7 +38,7 @@ Ketchup makes HR:
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 <p>
   💻 Solidity &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -49,7 +49,7 @@ Ketchup makes HR:
 
 ---
 
-## 🌍 Vision
+##  Vision
 
 To build a future where employees **own their work identity** and organizations operate on **trustless, transparent systems**.
 
@@ -58,6 +58,11 @@ To build a future where employees **own their work identity** and organizations 
 
 ---
 
+<p>
+  Live link - "https://ketchups.lovable.app"
+  Live link (updating soon)  
+</p>
+
 <p align="center">
-  Built with ❤️ by Team Ketchup
+  Built with by Team Ketchup
 </p>
