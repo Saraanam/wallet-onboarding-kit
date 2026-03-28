@@ -2,7 +2,6 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { LayoutDashboard, Users, Briefcase, DollarSign, Megaphone, BarChart3 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { employees, jobListings, departments, announcements, payrollSummary } from "@/data/mockData";
 
 const navItems = [
@@ -14,11 +13,15 @@ const navItems = [
   { title: "Announcements", url: "/employer/announcements", icon: Megaphone },
 ];
 
-const statusColor = (s: string) => {
-  if (s === "Active" || s === "Open") return "bg-green-100 text-green-800";
-  if (s === "On Leave") return "bg-yellow-100 text-yellow-800";
-  if (s === "Closed") return "bg-red-100 text-red-800";
-  return "bg-muted text-muted-foreground";
+const StatusBadge = ({ status }: { status: string }) => {
+  const cls = status === "Active" || status === "Open"
+    ? "status-active"
+    : status === "On Leave"
+    ? "status-warning"
+    : status === "Closed"
+    ? "status-danger"
+    : "glass-subtle text-muted-foreground";
+  return <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${cls}`}>{status}</span>;
 };
 
 const EmployerDashboard = () => (
@@ -32,7 +35,7 @@ const EmployerDashboard = () => (
           { label: "Departments", value: departments.length, icon: BarChart3 },
           { label: "Monthly Payroll", value: `$${(payrollSummary.totalPayroll / 1000).toFixed(0)}K`, icon: DollarSign },
         ].map(s => (
-          <Card key={s.label}>
+          <Card key={s.label} className="glass-card border-0 rounded-2xl">
             <CardContent className="p-5 flex items-center gap-4">
               <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-primary/10 text-primary">
                 <s.icon className="h-5 w-5" />
@@ -48,7 +51,7 @@ const EmployerDashboard = () => (
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Employee Directory */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 glass-card border-0 rounded-2xl">
           <CardHeader>
             <CardTitle className="text-lg">Employee Directory</CardTitle>
             <CardDescription>{employees.length} team members</CardDescription>
@@ -56,25 +59,25 @@ const EmployerDashboard = () => (
           <CardContent className="p-0">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Department</TableHead>
-                  <TableHead>Status</TableHead>
+                <TableRow className="border-border/30 hover:bg-transparent">
+                  <TableHead className="text-muted-foreground/60">Name</TableHead>
+                  <TableHead className="text-muted-foreground/60">Role</TableHead>
+                  <TableHead className="text-muted-foreground/60">Department</TableHead>
+                  <TableHead className="text-muted-foreground/60">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {employees.map(e => (
-                  <TableRow key={e.id}>
+                  <TableRow key={e.id} className="border-border/20 hover:bg-primary/5 transition-colors">
                     <TableCell className="font-medium">
-                      <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>{e.avatar}</div>
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold text-primary-foreground btn-gradient">{e.avatar}</div>
                         {e.name}
                       </div>
                     </TableCell>
                     <TableCell className="text-muted-foreground">{e.role}</TableCell>
                     <TableCell className="text-muted-foreground">{e.department}</TableCell>
-                    <TableCell><Badge className={statusColor(e.status)} variant="secondary">{e.status}</Badge></TableCell>
+                    <TableCell><StatusBadge status={e.status} /></TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -83,16 +86,16 @@ const EmployerDashboard = () => (
         </Card>
 
         {/* Job Listings */}
-        <Card>
+        <Card className="glass-card border-0 rounded-2xl">
           <CardHeader>
             <CardTitle className="text-lg">Job Listings</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3">
             {jobListings.map(j => (
-              <div key={j.id} className="rounded-lg border border-border p-3 space-y-1">
+              <div key={j.id} className="glass-subtle rounded-xl p-4 space-y-2 transition-all hover:border-primary/20">
                 <div className="flex items-center justify-between">
                   <p className="font-medium text-sm text-foreground">{j.title}</p>
-                  <Badge className={statusColor(j.status)} variant="secondary">{j.status}</Badge>
+                  <StatusBadge status={j.status} />
                 </div>
                 <p className="text-xs text-muted-foreground">{j.department} · {j.type} · {j.location}</p>
                 <p className="text-xs text-muted-foreground">{j.applicants} applicants</p>
@@ -104,21 +107,21 @@ const EmployerDashboard = () => (
 
       {/* Departments & Announcements */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
+        <Card className="glass-card border-0 rounded-2xl">
           <CardHeader><CardTitle className="text-lg">Departments</CardTitle></CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Department</TableHead>
-                  <TableHead>Headcount</TableHead>
-                  <TableHead>Manager</TableHead>
-                  <TableHead>Budget</TableHead>
+                <TableRow className="border-border/30 hover:bg-transparent">
+                  <TableHead className="text-muted-foreground/60">Department</TableHead>
+                  <TableHead className="text-muted-foreground/60">Headcount</TableHead>
+                  <TableHead className="text-muted-foreground/60">Manager</TableHead>
+                  <TableHead className="text-muted-foreground/60">Budget</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {departments.map(d => (
-                  <TableRow key={d.name}>
+                  <TableRow key={d.name} className="border-border/20 hover:bg-primary/5 transition-colors">
                     <TableCell className="font-medium">{d.name}</TableCell>
                     <TableCell>{d.headcount}</TableCell>
                     <TableCell className="text-muted-foreground">{d.manager}</TableCell>
@@ -130,11 +133,11 @@ const EmployerDashboard = () => (
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="glass-card border-0 rounded-2xl">
           <CardHeader><CardTitle className="text-lg">Announcements</CardTitle></CardHeader>
           <CardContent className="space-y-4">
             {announcements.map(a => (
-              <div key={a.id} className="border-l-2 border-primary pl-3 space-y-1">
+              <div key={a.id} className="border-l-2 border-primary/50 pl-4 space-y-1">
                 <p className="font-medium text-sm text-foreground">{a.title}</p>
                 <p className="text-xs text-muted-foreground">{a.date}</p>
                 <p className="text-sm text-muted-foreground">{a.content}</p>

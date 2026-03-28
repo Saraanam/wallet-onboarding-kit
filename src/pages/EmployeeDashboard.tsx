@@ -3,7 +3,6 @@ import { LayoutDashboard, CheckSquare, History, Receipt, CalendarDays, Trophy } 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { tasks, payslips, leaves, leaveBalance, rewards, workHistory } from "@/data/mockData";
 
@@ -16,17 +15,18 @@ const navItems = [
   { title: "Rewards", url: "/employee/rewards", icon: Trophy },
 ];
 
-const priorityColor = (p: string) => {
-  if (p === "High") return "bg-red-100 text-red-800";
-  if (p === "Medium") return "bg-yellow-100 text-yellow-800";
-  return "bg-green-100 text-green-800";
-};
-
-const taskStatusColor = (s: string) => {
-  if (s === "Completed") return "bg-green-100 text-green-800";
-  if (s === "In Progress") return "bg-blue-100 text-blue-800";
-  if (s === "On Hold") return "bg-yellow-100 text-yellow-800";
-  return "bg-muted text-muted-foreground";
+const StatusBadge = ({ status, type }: { status: string; type?: "priority" | "task" }) => {
+  let cls = "glass-subtle text-muted-foreground";
+  if (type === "priority") {
+    cls = status === "High" ? "status-danger" : status === "Medium" ? "status-warning" : "status-active";
+  } else {
+    cls = status === "Completed" || status === "Approved" ? "status-active"
+      : status === "In Progress" ? "status-info"
+      : status === "On Hold" || status === "Pending" ? "status-warning"
+      : status === "Rejected" ? "status-danger"
+      : "glass-subtle text-muted-foreground";
+  }
+  return <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${cls}`}>{status}</span>;
 };
 
 const myTasks = tasks.filter(t => t.assignee === "E001");
@@ -42,9 +42,9 @@ const EmployeeDashboard = () => (
           { label: "Leave Balance", value: `${leaveBalance.casual + leaveBalance.sick + leaveBalance.earned - leaveBalance.used.casual - leaveBalance.used.sick - leaveBalance.used.earned} days`, icon: CalendarDays },
           { label: "Last Pay", value: `$${payslips[0]?.netPay.toLocaleString() ?? "—"}`, icon: Receipt },
         ].map(s => (
-          <Card key={s.label}>
+          <Card key={s.label} className="glass-card border-0 rounded-2xl">
             <CardContent className="p-5 flex items-center gap-4">
-              <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-accent/10 text-accent">
+              <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-primary/10 text-primary">
                 <s.icon className="h-5 w-5" />
               </div>
               <div>
@@ -57,37 +57,43 @@ const EmployeeDashboard = () => (
       </div>
 
       <Tabs defaultValue="tasks">
-        <TabsList className="w-full justify-start">
-          <TabsTrigger value="tasks">My Tasks</TabsTrigger>
-          <TabsTrigger value="history">Work History</TabsTrigger>
-          <TabsTrigger value="payslips">Payslips</TabsTrigger>
-          <TabsTrigger value="leaves">Leaves</TabsTrigger>
-          <TabsTrigger value="rewards">Rewards</TabsTrigger>
+        <TabsList className="w-full justify-start glass-subtle rounded-xl border-0 p-1 h-auto gap-1">
+          {[
+            { value: "tasks", label: "My Tasks" },
+            { value: "history", label: "Work History" },
+            { value: "payslips", label: "Payslips" },
+            { value: "leaves", label: "Leaves" },
+            { value: "rewards", label: "Rewards" },
+          ].map(tab => (
+            <TabsTrigger key={tab.value} value={tab.value} className="rounded-lg px-4 py-2 text-sm data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:shadow-[0_0_10px_hsl(250_85%_65%/0.15)]">
+              {tab.label}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
         {/* TASKS */}
         <TabsContent value="tasks">
-          <Card>
+          <Card className="glass-card border-0 rounded-2xl">
             <CardHeader><CardTitle>My Tasks</CardTitle><CardDescription>Assigned tasks and progress</CardDescription></CardHeader>
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>Task</TableHead>
-                    <TableHead>Project</TableHead>
-                    <TableHead>Priority</TableHead>
-                    <TableHead>Due Date</TableHead>
-                    <TableHead>Status</TableHead>
+                  <TableRow className="border-border/30 hover:bg-transparent">
+                    <TableHead className="text-muted-foreground/60">Task</TableHead>
+                    <TableHead className="text-muted-foreground/60">Project</TableHead>
+                    <TableHead className="text-muted-foreground/60">Priority</TableHead>
+                    <TableHead className="text-muted-foreground/60">Due Date</TableHead>
+                    <TableHead className="text-muted-foreground/60">Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {myTasks.map(t => (
-                    <TableRow key={t.id}>
+                    <TableRow key={t.id} className="border-border/20 hover:bg-primary/5 transition-colors">
                       <TableCell className="font-medium">{t.title}</TableCell>
                       <TableCell className="text-muted-foreground">{t.project}</TableCell>
-                      <TableCell><Badge className={priorityColor(t.priority)} variant="secondary">{t.priority}</Badge></TableCell>
+                      <TableCell><StatusBadge status={t.priority} type="priority" /></TableCell>
                       <TableCell className="text-muted-foreground">{t.dueDate}</TableCell>
-                      <TableCell><Badge className={taskStatusColor(t.status)} variant="secondary">{t.status}</Badge></TableCell>
+                      <TableCell><StatusBadge status={t.status} type="task" /></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -98,17 +104,17 @@ const EmployeeDashboard = () => (
 
         {/* WORK HISTORY */}
         <TabsContent value="history">
-          <Card>
+          <Card className="glass-card border-0 rounded-2xl">
             <CardHeader><CardTitle>Work History</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               {workHistory.map(w => (
-                <div key={w.id} className="flex items-center justify-between rounded-lg border border-border p-4">
+                <div key={w.id} className="flex items-center justify-between glass-subtle rounded-xl p-5 transition-all hover:border-primary/20">
                   <div>
                     <p className="font-medium text-foreground">{w.project}</p>
                     <p className="text-sm text-muted-foreground">{w.role} · {w.duration}</p>
                   </div>
                   <div className="text-right">
-                    <Badge variant={w.status === "Active" ? "default" : "secondary"}>{w.status}</Badge>
+                    <StatusBadge status={w.status} />
                     <p className="text-xs text-muted-foreground mt-1">{w.contributions} contributions</p>
                   </div>
                 </div>
@@ -119,31 +125,31 @@ const EmployeeDashboard = () => (
 
         {/* PAYSLIPS */}
         <TabsContent value="payslips">
-          <Card>
+          <Card className="glass-card border-0 rounded-2xl">
             <CardHeader><CardTitle>Payslips</CardTitle><CardDescription>Monthly salary breakdown</CardDescription></CardHeader>
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>Month</TableHead>
-                    <TableHead>Basic</TableHead>
-                    <TableHead>HRA</TableHead>
-                    <TableHead>Bonus</TableHead>
-                    <TableHead>Deductions</TableHead>
-                    <TableHead>Net Pay</TableHead>
-                    <TableHead>Status</TableHead>
+                  <TableRow className="border-border/30 hover:bg-transparent">
+                    <TableHead className="text-muted-foreground/60">Month</TableHead>
+                    <TableHead className="text-muted-foreground/60">Basic</TableHead>
+                    <TableHead className="text-muted-foreground/60">HRA</TableHead>
+                    <TableHead className="text-muted-foreground/60">Bonus</TableHead>
+                    <TableHead className="text-muted-foreground/60">Deductions</TableHead>
+                    <TableHead className="text-muted-foreground/60">Net Pay</TableHead>
+                    <TableHead className="text-muted-foreground/60">Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {payslips.map(p => (
-                    <TableRow key={p.id}>
+                    <TableRow key={p.id} className="border-border/20 hover:bg-primary/5 transition-colors">
                       <TableCell className="font-medium">{p.month}</TableCell>
                       <TableCell>${p.basicSalary.toLocaleString()}</TableCell>
                       <TableCell>${p.hra.toLocaleString()}</TableCell>
                       <TableCell>${p.bonus.toLocaleString()}</TableCell>
-                      <TableCell className="text-red-600">-${p.deductions.toLocaleString()}</TableCell>
-                      <TableCell className="font-bold">${p.netPay.toLocaleString()}</TableCell>
-                      <TableCell><Badge variant="default">{p.status}</Badge></TableCell>
+                      <TableCell className="text-destructive">-${p.deductions.toLocaleString()}</TableCell>
+                      <TableCell className="font-bold glow-text">${p.netPay.toLocaleString()}</TableCell>
+                      <TableCell><StatusBadge status={p.status} /></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -155,51 +161,51 @@ const EmployeeDashboard = () => (
         {/* LEAVES */}
         <TabsContent value="leaves">
           <div className="grid gap-6 lg:grid-cols-3">
-            <Card className="lg:col-span-2">
+            <Card className="lg:col-span-2 glass-card border-0 rounded-2xl">
               <CardHeader><CardTitle>My Leave Requests</CardTitle></CardHeader>
               <CardContent className="p-0">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Type</TableHead>
-                      <TableHead>From</TableHead>
-                      <TableHead>To</TableHead>
-                      <TableHead>Days</TableHead>
-                      <TableHead>Reason</TableHead>
-                      <TableHead>Status</TableHead>
+                    <TableRow className="border-border/30 hover:bg-transparent">
+                      <TableHead className="text-muted-foreground/60">Type</TableHead>
+                      <TableHead className="text-muted-foreground/60">From</TableHead>
+                      <TableHead className="text-muted-foreground/60">To</TableHead>
+                      <TableHead className="text-muted-foreground/60">Days</TableHead>
+                      <TableHead className="text-muted-foreground/60">Reason</TableHead>
+                      <TableHead className="text-muted-foreground/60">Status</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {leaves.map(l => (
-                      <TableRow key={l.id}>
+                      <TableRow key={l.id} className="border-border/20 hover:bg-primary/5 transition-colors">
                         <TableCell className="font-medium">{l.type}</TableCell>
                         <TableCell>{l.from}</TableCell>
                         <TableCell>{l.to}</TableCell>
                         <TableCell>{l.days}</TableCell>
                         <TableCell className="text-muted-foreground">{l.reason}</TableCell>
-                        <TableCell>
-                          <Badge variant={l.status === "Approved" ? "default" : l.status === "Pending" ? "secondary" : "destructive"}>{l.status}</Badge>
-                        </TableCell>
+                        <TableCell><StatusBadge status={l.status} /></TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="glass-card border-0 rounded-2xl">
               <CardHeader><CardTitle>Leave Balance</CardTitle></CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-4">
                 {[
                   { type: "Casual", total: leaveBalance.casual, used: leaveBalance.used.casual },
                   { type: "Sick", total: leaveBalance.sick, used: leaveBalance.used.sick },
                   { type: "Earned", total: leaveBalance.earned, used: leaveBalance.used.earned },
                 ].map(lb => (
-                  <div key={lb.type} className="space-y-1">
+                  <div key={lb.type} className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span>{lb.type}</span>
+                      <span className="font-medium">{lb.type}</span>
                       <span className="text-muted-foreground">{lb.total - lb.used} remaining</span>
                     </div>
-                    <Progress value={(lb.used / lb.total) * 100} className="h-2" />
+                    <div className="h-2 rounded-full bg-muted/50 overflow-hidden">
+                      <div className="h-full rounded-full btn-gradient" style={{ width: `${(lb.used / lb.total) * 100}%` }} />
+                    </div>
                   </div>
                 ))}
               </CardContent>
@@ -209,18 +215,20 @@ const EmployeeDashboard = () => (
 
         {/* REWARDS */}
         <TabsContent value="rewards">
-          <Card>
+          <Card className="glass-card border-0 rounded-2xl">
             <CardHeader><CardTitle>Rewards & Achievements</CardTitle><CardDescription>Total: {rewards.reduce((a, r) => a + r.points, 0)} points</CardDescription></CardHeader>
             <CardContent>
               <div className="grid gap-4 sm:grid-cols-2">
                 {rewards.map(r => (
-                  <div key={r.id} className="rounded-xl border border-border p-4 space-y-2" style={{ boxShadow: "var(--shadow-card)" }}>
+                  <div key={r.id} className="glass-subtle rounded-2xl p-5 space-y-3 transition-all hover:border-primary/20">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Trophy className="h-5 w-5 text-yellow-500" />
+                        <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-warning/10">
+                          <Trophy className="h-4 w-4 text-warning" />
+                        </div>
                         <h4 className="font-display font-semibold text-foreground">{r.title}</h4>
                       </div>
-                      <Badge variant="secondary">{r.points} pts</Badge>
+                      <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium status-info">{r.points} pts</span>
                     </div>
                     <p className="text-sm text-muted-foreground">{r.description}</p>
                     <p className="text-xs text-muted-foreground">{r.date} · {r.type}</p>
