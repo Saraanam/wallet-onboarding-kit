@@ -14,11 +14,12 @@ const RolesSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-20" style={{ background: "var(--gradient-hero)" }}>
-      <div className="container mx-auto px-4">
+    <section className="py-20 relative">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,hsl(142_72%_50%/0.05),transparent_60%)]" />
+      <div className="container relative mx-auto px-4">
         <div className="text-center">
           <h2 className="font-display text-3xl font-bold text-foreground sm:text-4xl">
-            Select Your Role
+            Select Your <span className="text-primary neon-glow">Role</span>
           </h2>
           <p className="mt-3 text-muted-foreground">
             Access your personalized dashboard based on your role
@@ -29,19 +30,19 @@ const RolesSection = () => {
           {roles.map((r) => (
             <div
               key={r.title}
-              className="group flex flex-col rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1"
+              className="group flex flex-col rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 neon-border"
               style={{ boxShadow: "var(--shadow-card)" }}
             >
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <r.icon className="h-6 w-6" />
               </div>
               <h3 className="font-display text-lg font-semibold text-foreground">{r.title}</h3>
               <p className="mt-2 flex-1 text-sm text-muted-foreground">{r.desc}</p>
               <button
-                className="mt-5 w-full rounded-xl py-2.5 text-sm font-medium transition-all disabled:cursor-not-allowed disabled:opacity-40"
+                className="mt-5 w-full rounded-xl py-2.5 text-sm font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-40"
                 style={
                   connected
-                    ? { background: "var(--gradient-primary)", color: "white" }
+                    ? { background: "var(--gradient-primary)", color: "hsl(150 10% 4%)" }
                     : { background: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }
                 }
                 disabled={!connected}
